@@ -1,7 +1,7 @@
 package client;
 
 import API.ClientStub;
-import Utilities.Constants;
+import utilities.Constants;
 
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;

@@ -2,7 +2,7 @@ package server;
 
 
 import API.ClientStub;
-import Utilities.Constants;
+import utilities.Constants;
 
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
