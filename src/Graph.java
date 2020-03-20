@@ -71,9 +71,9 @@ public class Graph {
         updated = true;
         if(!nameMapping.containsKey(a) && !nameMapping.containsKey(b)) {
             adjacencyMatrix = copyMatrixWithIncrease(adjacencyMatrix, 2);
-            nameMapping.put(min(a,b),numberOfVertecies);
+            nameMapping.put(a,numberOfVertecies);
             numberOfVertecies += 1;
-            nameMapping.put(max(a,b),numberOfVertecies);
+            nameMapping.put(b,numberOfVertecies);
             numberOfVertecies += 1;
         } else if (!nameMapping.containsKey(a)) {
             adjacencyMatrix = copyMatrixWithIncrease(adjacencyMatrix, 1);
