@@ -1,3 +1,5 @@
+import utilities.Graph;
+import utilities.GraphInitializer;
 
 public class GraphUsageExample {
 

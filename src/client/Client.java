@@ -18,13 +18,23 @@ public class Client {
         stub = (ClientStub) registry.lookup("stub");
     }
 
-    public ArrayList<String> process(ArrayList<String> queries) throws RemoteException {
-        ArrayList<String> results = stub.execute(queries);
+    public String process(ArrayList<String> queries) throws RemoteException {
+        String results = stub.execute(queries);
         return results;
     }
 
     public static void main(String[] args) throws RemoteException, NotBoundException {
         Client client = new Client("localhost");
-        client.process(new ArrayList<>());
+        //TODO Parse batches here and give ArrayList tp process.
+        //TODO batches will be generated randomly client will sleep x time between batches
+        //TODO x is an arg
+        while (true){
+            ArrayList<String> queries = new ArrayList<>();
+            queries.add("A 1 2");
+            queries.add("A 1 5");
+            queries.add("D 2 4");
+            queries.add("Q 1 4");
+            System.out.println(client.process(queries));
+        }
     }
 }

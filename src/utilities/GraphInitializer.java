@@ -1,4 +1,7 @@
+package utilities;
+
 import javafx.util.Pair;
+import utilities.Graph;
 
 import java.io.File;
 import java.io.FileNotFoundException;

@@ -1,14 +1,39 @@
 package server;
 
 import API.ClientStub;
+import utilities.Graph;
 
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 
 public class BatchProcessor implements ClientStub {
+    private Graph graph;
+    public BatchProcessor(Graph graph){
+        this.graph = graph;
+    }
     @Override
-    public ArrayList<String> execute(ArrayList<String> queries) throws RemoteException {
+    public String execute(ArrayList<String> queries) throws RemoteException {
         System.out.println("Start executing!");
-        return null;
+        StringBuilder result = new StringBuilder();
+        try {
+            for(String query: queries){
+                String[] splited_query = query.split(" ");
+                int a = Integer.parseInt(splited_query[1]);
+                int b = Integer.parseInt(splited_query[2]);
+                if(splited_query[0].equals("A")){
+                    graph.addEdge(a, b);
+                }else if (splited_query[0].equals("D")){
+                    graph.removeEdge(a, b);
+                }else {
+                    int shortestPath = graph.getShortestPath(a, b);
+                    result.append(shortestPath);
+                    result.append("\n");
+                }
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        graph.printGraph();
+        return result.toString();
     }
 }
