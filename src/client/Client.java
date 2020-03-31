@@ -1,6 +1,7 @@
 package client;
 
 import API.ClientStub;
+import utilities.Batcher;
 import utilities.Constants;
 
 import java.rmi.NotBoundException;
@@ -8,6 +9,7 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Client {
     private Registry registry;
@@ -23,18 +25,38 @@ public class Client {
         return results;
     }
 
-    public static void main(String[] args) throws RemoteException, NotBoundException {
-        Client client = new Client("localhost");
-        //TODO Parse batches here and give ArrayList tp process.
-        //TODO batches will be generated randomly client will sleep x time between batches
-        //TODO x is an arg
-        while (true){
-            ArrayList<String> queries = new ArrayList<>();
-            queries.add("A 1 2");
-            queries.add("A 1 5");
-            queries.add("D 2 4");
-            queries.add("Q 1 4");
-            System.out.println(client.process(queries));
+    public static void main(String[] args) throws RemoteException, NotBoundException, InterruptedException {
+         Client client = new Client("localhost");
+
+        String MODE = "DEFAULT";
+        long SLEEP_TIME = 10000L;
+        Batcher batcher;
+
+        long timeToSleep = args.length > 0 ? Long.parseLong(args[0]) : SLEEP_TIME;
+        int runs = 0;
+        while(true){
+            if(MODE.equals("DEFAULT")){
+                batcher = new Batcher();
+            }
+            // Optional to pass params
+            else {
+                HashMap<String, Object> params = new HashMap<>();
+                params.put("maxBatchSize", 70);
+                batcher = new Batcher(params);
+            }
+
+            ArrayList<String> queries = batcher.getBatch();
+
+            System.out.println("=========================");
+            System.out.println("Current run: " + runs);
+            for(String str: queries){
+                System.out.println(str);
+            }
+            System.out.println("=========================");
+
+            client.process(queries);
+            Thread.sleep(timeToSleep);
+            runs++;
         }
     }
 }
