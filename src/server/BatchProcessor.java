@@ -40,7 +40,7 @@ public class BatchProcessor implements ClientStub {
             e.printStackTrace();
         }
         long endTime = System.nanoTime();
-        long durationInMs = (endTime - startTime)/1000000;
+        float durationInMs = (float)(endTime - startTime)/(float)1000000;
         logger.log_batch(queries.size(), clientNum, durationInMs);
         return result.toString();
     }

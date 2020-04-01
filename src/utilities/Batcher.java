@@ -105,7 +105,6 @@ public class Batcher {
             batch.add(builder.toString());
         }
 
-        batch.add("F");
         return batch;
     }
 }

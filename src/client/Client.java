@@ -24,6 +24,7 @@ public class Client {
 
     public String process(ArrayList<String> queries) throws IOException, InterruptedException {
         String results = stub.execute(queries, this.clientNum);
+        System.out.println(results);
         return results;
     }
 

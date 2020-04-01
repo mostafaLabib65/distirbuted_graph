@@ -17,11 +17,22 @@ public class Logger {
         writer = new FileWriter(name);
     }
 
-    public void log_batch(int length, int clientNum, long executionTime) throws IOException, InterruptedException {
+    public void log_batch(int length, int clientNum, float executionTime) throws IOException, InterruptedException {
+        StringBuilder log = new StringBuilder();
         writerLock.acquire();
         long time = date.getTime();
         Timestamp ts = new Timestamp(time);
-        writer.write(ts + " " + clientNum + " " + length + " " + executionTime + " ms\n");
+        log.append(ts);
+        log.append(" ");
+        log.append(clientNum);
+        log.append(" ");
+        log.append(length);
+        log.append(" ");
+        log.append(executionTime);
+        log.append("\n");
+        writer.write(log.toString());
+        writer.flush();
+        System.out.println(log.toString());
         writerLock.release();
     }
 }
