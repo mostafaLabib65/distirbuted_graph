@@ -23,7 +23,7 @@ public class Batcher {
 
     public Batcher() {
         graphStartingNodes = 4;
-        nextNodeCounter = 5;
+        nextNodeCounter = graphStartingNodes + 1;
         maxBatchSize = 10;
         minBatchSize = 4;
         queryOperationP = 0.5;
@@ -53,6 +53,7 @@ public class Batcher {
 
         // Assembling the operations
         for(int i = 0 ; i < randomBatchSize ; i++){
+            boolean forceExistingNodeSelection = false;
             StringBuilder builder = new StringBuilder();
 
             // Uniform sample for operation selection
@@ -61,6 +62,7 @@ public class Batcher {
             // Sample QUERY operation if value in range [0, queryOperationP)
             if(sample < queryOperationP) {
                 builder.append("Q ");
+                forceExistingNodeSelection = true;
             }
             // Sample ADD operation if value in range [queryOperationP, addOperationP)
             else if (queryOperationP <= sample && sample < addOperationP) {
@@ -69,6 +71,7 @@ public class Batcher {
             // Sample DELETE operation if value in range [addOperationP, 1.0]
             else {
                 builder.append("D ");
+                forceExistingNodeSelection = true;
             }
 
 
@@ -78,7 +81,7 @@ public class Batcher {
                 int number;
 
                 // Sample existing node uniformly from original graph if value in range [0, existingNodeP)
-                if(sample < existingNodeP){
+                if(forceExistingNodeSelection || sample < existingNodeP){
                     number = random.nextInt(graphStartingNodes) + 1;
                 }
                 // Sample new node
