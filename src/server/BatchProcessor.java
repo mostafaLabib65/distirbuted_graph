@@ -2,19 +2,25 @@ package server;
 
 import API.ClientStub;
 import utilities.Graph;
+import utilities.Logger;
 
+import java.io.IOException;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
 
 public class BatchProcessor implements ClientStub {
     private Graph graph;
-    public BatchProcessor(Graph graph){
+    private Logger logger;
+    public BatchProcessor(Graph graph, Logger logger){
         this.graph = graph;
+        this.logger = logger;
     }
     @Override
-    public String execute(ArrayList<String> queries) throws RemoteException {
+    public String execute(ArrayList<String> queries, int clientNum) throws IOException, InterruptedException {
         System.out.println("Start executing!");
         StringBuilder result = new StringBuilder();
+        long startTime = System.nanoTime();
         try {
             for(String query: queries){
                 String[] splited_query = query.split(" ");
@@ -33,7 +39,9 @@ public class BatchProcessor implements ClientStub {
         }catch (Exception e){
             e.printStackTrace();
         }
-        graph.printGraph();
+        long endTime = System.nanoTime();
+        long durationInMs = (endTime - startTime)/1000000;
+        logger.log_batch(queries.size(), clientNum, durationInMs);
         return result.toString();
     }
 }

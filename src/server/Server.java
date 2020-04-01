@@ -5,7 +5,9 @@ import API.ClientStub;
 import utilities.Constants;
 import utilities.Graph;
 import utilities.GraphInitializer;
+import utilities.Logger;
 
+import java.io.IOException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
@@ -16,14 +18,14 @@ public class Server {
     private Registry serverRegistry;
     private ClientStub stub;
     private Graph graph = GraphInitializer.initializeGraph("input.txt");
-
-    private Server() throws RemoteException {
-//        System.setProperty("java.rmi.server.hostname","127.0.0.1");
+    private Logger logger = new Logger();
+    private Server() throws RemoteException, IOException {
+        System.setProperty("java.rmi.server.hostname","localhost");
 //        System.setProperty("remoting.bind_by_host","false");
-        serverRegistry = LocateRegistry.createRegistry(Constants.PORT_NUMBER);
+        serverRegistry = LocateRegistry.createRegistry(5001);
     }
 
-    public static Server getInstance() throws RemoteException {
+    public static Server getInstance() throws IOException, RemoteException {
         if (server == null) {
             server = new Server();
         }
@@ -31,13 +33,13 @@ public class Server {
     }
 
     public void start() throws RemoteException {
-        stub = new BatchProcessor(this.graph);
-        ClientStub remoteProcessor = (ClientStub) UnicastRemoteObject.exportObject(stub, 0);
+        stub = new BatchProcessor(this.graph, this.logger);
+        ClientStub remoteProcessor = (ClientStub) UnicastRemoteObject.exportObject(stub, 5010);
         serverRegistry.rebind("stub", remoteProcessor);
         System.out.println("Server is running");
     }
 
-    public static void main(String[] args) throws RemoteException {
+    public static void main(String[] args) throws IOException, RemoteException {
         Server serverTest = Server.getInstance();
         serverTest.start();
     }

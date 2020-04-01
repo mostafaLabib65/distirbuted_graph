@@ -4,6 +4,7 @@ import API.ClientStub;
 import utilities.Batcher;
 import utilities.Constants;
 
+import java.io.IOException;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
@@ -14,19 +15,20 @@ import java.util.HashMap;
 public class Client {
     private Registry registry;
     private ClientStub stub;
-
-    public Client(String hostName) throws RemoteException, NotBoundException {
+    private int clientNum;
+    public Client(String hostName, int clientNum) throws RemoteException, NotBoundException {
         registry = LocateRegistry.getRegistry(hostName, Constants.PORT_NUMBER);
         stub = (ClientStub) registry.lookup("stub");
+        this.clientNum = clientNum;
     }
 
-    public String process(ArrayList<String> queries) throws RemoteException {
-        String results = stub.execute(queries);
+    public String process(ArrayList<String> queries) throws IOException, InterruptedException {
+        String results = stub.execute(queries, this.clientNum);
         return results;
     }
 
-    public static void main(String[] args) throws RemoteException, NotBoundException, InterruptedException {
-         Client client = new Client("localhost");
+    public static void main(String[] args) throws IOException, NotBoundException, InterruptedException {
+         Client client = new Client("localhost", Integer.parseInt(args[1]));
 
         String MODE = "DEFAULT";
         long SLEEP_TIME = 10000L;
