@@ -29,7 +29,7 @@ public class Client {
     }
 
     public static void main(String[] args) throws IOException, NotBoundException, InterruptedException {
-         Client client = new Client("156.212.244.100", Integer.parseInt(args[1]));
+         Client client = new Client("156.212.50.151", Integer.parseInt(args[1]));
 
         String MODE = "DEFAULT";
         long SLEEP_TIME = 10000L;
