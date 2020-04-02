@@ -10,18 +10,17 @@ import java.util.*;
 public class GraphInitializer {
 
 
-    public static Graph initializeGraph(String pathName) {
+    public static Graph initializeGraph(String pathName, String algorithm) {
         try {
             HashSet<Integer> seenNodes = new HashSet<>();
             ArrayList<Integer> nodesId = new ArrayList<>();
-            Graph graph;
             ArrayList<Pair<Integer, Integer>> edges = new ArrayList<>();
             File file = new File(pathName);
             Scanner scanner = new Scanner(file);
             while (scanner.hasNextLine()) {
                 String line = scanner.nextLine();
 
-                if(line.equalsIgnoreCase("S")) {
+                if (line.equalsIgnoreCase("S")) {
                     break;
                 }
 
@@ -32,12 +31,12 @@ public class GraphInitializer {
                 int node2 = Integer.parseInt(nodes[1]);
 
 
-                if(!seenNodes.contains(node1)) {
+                if (!seenNodes.contains(node1)) {
                     seenNodes.add(node1);
                     nodesId.add(node1);
                 }
 
-                if(!seenNodes.contains(node2)) {
+                if (!seenNodes.contains(node2)) {
                     seenNodes.add(node2);
                     nodesId.add(node2);
                 }
@@ -52,23 +51,25 @@ public class GraphInitializer {
             }
             scanner.close();
 
+            if (algorithm.equals("BFS")) {
+                Graph graph = new BFSGraph(nodesId.size());
+                graph.initializeEdges(edges);
+                return graph;
+            } else {
 
-            graph = new Graph(nodesId.size());
-            Collections.sort(nodesId);
-
-            graph.nameTheNodes(nodesId);
-            graph.initializeEdges(edges);
-
-            return graph;
-
+                FloydWarshallGraph graph;
+                graph = new FloydWarshallGraph(nodesId.size());
+                Collections.sort(nodesId);
+                graph.nameTheNodes(nodesId);
+                graph.initializeEdges(edges);
+                return graph;
+            }
 
         } catch (FileNotFoundException e) {
             System.out.println("An error occurred.");
             e.printStackTrace();
             return null;
         }
-
-
 
 
     }

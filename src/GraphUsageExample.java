@@ -6,7 +6,7 @@ public class GraphUsageExample {
 
     public static void main(String[] args)  {
 
-        Graph graph = GraphInitializer.initializeGraph("input.txt");
+        Graph graph = GraphInitializer.initializeGraph("input.txt", "FloydWarshall");
 
         graph.printGraph();
 
