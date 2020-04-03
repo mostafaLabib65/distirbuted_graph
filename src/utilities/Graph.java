@@ -35,7 +35,13 @@ public class Graph {
 
         for (int i = 0; i < size; i++) {
             for (int j = 0; j< size; j++) {
-                adjacencyMatrix[i][j] = INF;
+                if(i == j){
+                    adjacencyMatrix[i][j] = 0;
+
+                }else{
+                    adjacencyMatrix[i][j] = INF;
+
+                }
             }
 
         }
@@ -68,26 +74,24 @@ public class Graph {
             readersLock.acquire();
         writersCountLock.release();
         writersLock.acquire();
+            updated = true;
 
-        updated = true;
-        if(!nameMapping.containsKey(a) && !nameMapping.containsKey(b)) {
-            adjacencyMatrix = copyMatrixWithIncrease(adjacencyMatrix, 2);
-            nameMapping.put(a,numberOfVertecies);
-            numberOfVertecies += 1;
-            nameMapping.put(b,numberOfVertecies);
-            numberOfVertecies += 1;
-        } else if (!nameMapping.containsKey(a)) {
-            adjacencyMatrix = copyMatrixWithIncrease(adjacencyMatrix, 1);
-            nameMapping.put(a,numberOfVertecies);
-            numberOfVertecies += 1;
-        } else if (!nameMapping.containsKey(b)) {
-            adjacencyMatrix = copyMatrixWithIncrease(adjacencyMatrix, 1);
-            nameMapping.put(b,numberOfVertecies);
-            numberOfVertecies += 1;
-        }
-        adjacencyMatrix[nameMapping.get(a)][nameMapping.get(b)] = 1;
-
-
+            if(!nameMapping.containsKey(a) && !nameMapping.containsKey(b)) {
+                adjacencyMatrix = copyMatrixWithIncrease(adjacencyMatrix, 2);
+                nameMapping.put(a,numberOfVertecies);
+                numberOfVertecies += 1;
+                nameMapping.put(b,numberOfVertecies);
+                numberOfVertecies += 1;
+            } else if (!nameMapping.containsKey(a)) {
+                adjacencyMatrix = copyMatrixWithIncrease(adjacencyMatrix, 1);
+                nameMapping.put(a,numberOfVertecies);
+                numberOfVertecies += 1;
+            } else if (!nameMapping.containsKey(b)) {
+                adjacencyMatrix = copyMatrixWithIncrease(adjacencyMatrix, 1);
+                nameMapping.put(b,numberOfVertecies);
+                numberOfVertecies += 1;
+            }
+            adjacencyMatrix[nameMapping.get(a)][nameMapping.get(b)] = 1;
 
         writersLock.release();
         writersCountLock.acquire();
@@ -113,7 +117,11 @@ public class Graph {
 
             for (int i = 0; i < d1; i++) {
                 for (int j = 0; j< d2; j++) {
-                    tmp[i][j] = INF;
+                    if(i != j){
+                        tmp[i][j] = INF;
+                    }else {
+                        tmp[i][j] = 0;
+                    }
                 }
             }
 
@@ -141,9 +149,9 @@ public class Graph {
 
 
         updated = true;
-        adjacencyMatrix[nameMapping.get(a)][nameMapping.get(b)] = INF;
-
-
+        if(a != b){
+            adjacencyMatrix[nameMapping.get(a)][nameMapping.get(b)] = INF;
+        }
         writersLock.release();
         writersCountLock.acquire();
             writerCount--;
@@ -211,7 +219,7 @@ public class Graph {
 
 
 
-    public void printGraph(){
+    public synchronized void printGraph(){
         for (int i = 0; i < numberOfVertecies; i++) {
             for (int j = 0 ; j < numberOfVertecies; j++) {
                 if(adjacencyMatrix[i][j] == INF)
