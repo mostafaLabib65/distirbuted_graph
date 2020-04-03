@@ -20,7 +20,7 @@ public class Server {
     private Graph graph = GraphInitializer.initializeGraph("input.txt");
     private Logger logger = new Logger();
     private Server() throws RemoteException, IOException {
-        System.setProperty("java.rmi.server.hostname","156.212.50.151");
+        System.setProperty("java.rmi.server.hostname","102.44.51.8");
 //        System.setProperty("remoting.bind_by_host","false");
         serverRegistry = LocateRegistry.createRegistry(5001);
     }
