@@ -17,7 +17,7 @@ public class Server {
     private static Server server;
     private Registry serverRegistry;
     private ClientStub stub;
-    private Graph graph = GraphInitializer.initializeGraph("input.txt", "BFS");
+    private Graph graph = GraphInitializer.initializeGraph("input.txt", "FloydWarshall");
     private Logger logger = new Logger();
     private Server() throws RemoteException, IOException {
         System.setProperty("java.rmi.server.hostname","102.44.51.8");
